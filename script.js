@@ -6,12 +6,6 @@ function createPlate(){
   createTable();
 }
 
-var grille = new Array();
-for (var i = 0; i < 7; i++) {
-  grille[i]= new Array();
-}
-
-
 function createTitle(){
   var title = document.createElement('div');
   title.innerHTML = "Puissance 4";
