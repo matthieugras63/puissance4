@@ -25,19 +25,21 @@ function createTable(){
   plateau.style.height = "600px";
   for(var i = 0; i < 6; i++){ /* création d'un tableau */
     var row = plateau.insertRow();
-    for(var j = 0; j < 7; j++){ /* création d'un tableau de tableau */
-      var col = row.insertCell();
-      col.id= i+1 + ":" + (j+1); /* attribution d'un id dépendant de la cellule, allant de 1:1 à 6:7 */
-      col.style.border = '3px solid black';
-      col.style.padding = "0";
-      col.style.width="100px";
-      col.style.height="100px";
-      col.style.maxWidth="100px";
-      col.style.maxHeight="100px";
-      col.style.minWidth="100px";
-      col.style.minHeight="100px";
-    }
-  }
+  for(var j = 0; j < 7; j++){ /* création d'un tableau de tableau */
+    var col = row.insertCell();
+  col.id= i+1 + ":" + (j+1); /* attribution d'un id dépendant de la cellule, allant de 1:1 à 6:7 */
+  col.style.border = '3px solid black';
+  col.style.padding = "0";
+  col.style.width="100px";
+  col.style.height="100px";
+  col.style.maxWidth="100px";
+  col.style.maxHeight="100px";
+  col.style.minWidth="100px";
+  col.style.minHeight="100px";
+}
+}
+document.getElementById('plate').appendChild(plateau);
+plateau.id="table"
 }
 
 // Cette fonction est à compléter pour que le numéro du joueur soit modifié après chaque coup
@@ -77,7 +79,7 @@ for (var i = 0; i < cells.length; i++) {
       alert("La colonne est pleine !")
     } else {
       var cellToFill = document.getElementById(placesRestantes +':' +y); /* insère une div en cercle dans la cellule ayant pour colonne y, mais ligne la valeur du nombre de place. Sachant
-                                                                          que la cellule la plus basse a pour valeur de x 6, les jetons se placeront du bas vers le haut */
+      que la cellule la plus basse a pour valeur de x 6, les jetons se placeront du bas vers le haut */
       if (couleur === "yellow") {
         cellToFill.appendChild(circle);
         couleur="red"
