@@ -14,12 +14,6 @@ body{
   align-content: center;
 }
 
-#title div{
-  display: flex;
-  justify-content: center;
-  align-content: center;
-}
-
 #middle{
   width: 100%;
   display: flex;
@@ -27,12 +21,12 @@ body{
 }
 
 #plate{
-  margin: auto;
-  border:1px solid black;
-  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-#score{
-  width:30%;
-  border:1px solid black;
+#playerTurn{
+  padding-top: 50px;
 }
