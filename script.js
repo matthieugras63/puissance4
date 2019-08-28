@@ -2,7 +2,6 @@ createPlate(); /* création du plateau de jeu */
 
 function createPlate(){
   createTitle();
-  whoIsPlaying();
   createTable();
 }
 
@@ -27,7 +26,7 @@ function createTable(){
     var row = plateau.insertRow();
   for(var j = 0; j < 7; j++){ /* création d'un tableau de tableau */
     var col = row.insertCell();
-  col.id= i+1 + ":" + (j+1); /* attribution d'un id dépendant de la cellule, allant de 1:1 à 6:7 */
+  col.id= i+1+":"+(j+1); /* attribution d'un id dépendant de la cellule, allant de 1:1 à 6:7 */
   col.style.border = '3px solid black';
   col.style.padding = "0";
   col.style.width="100px";
@@ -42,13 +41,6 @@ document.getElementById('plate').appendChild(plateau);
 plateau.id="table"
 }
 
-// Cette fonction est à compléter pour que le numéro du joueur soit modifié après chaque coup
-function whoIsPlaying(){
-  var playing = document.createElement('div');
-  playing.innerHTML = "C'est au joueur 1 de jouer";
-  playing.fontSize="25px";
-  document.getElementById('playerTurn').appendChild(playing);
-}
 
 
 //Fonction qui ira inscrire les jetons dans les cellules
@@ -65,11 +57,11 @@ for (var i = 0; i < cells.length; i++) {
     var whichId=this.id; /* récupération de l'id de la cellule sur laquelle on click */
     var x = whichId.charAt(0); /* récupération de la première valeur. Format x:y, on récupèrera l'index 0, à savoir x ici */
     var y = whichId.charAt(2); /* idem avec l'index 2 */
-    // console.log("colonne: " +x);
-    // console.log("ligne: " +y);
+    // console.log("ligne: " +x);
+    // console.log("colonne: " +y);
     var placesRestantes = 0 /* initialisation du nombre de places dispo restantes dans la colonne */
     for (var i = 1; i < 7; i++) {
-      var column = document.getElementById(i +':' +y); /* cette boucle vérifiera les contenus des cellules dans la colonne y */
+      var column = document.getElementById(i+':'+y); /* cette boucle vérifiera les contenus des cellules dans la colonne y */
       if (column.innerHTML=="") {
         placesRestantes++; /* incrémentation de la valeur de 1 a chaque fois qu'une cellule vide est rencontrée */
       }
@@ -78,19 +70,130 @@ for (var i = 0; i < cells.length; i++) {
     if (placesRestantes ==0) {
       alert("La colonne est pleine !")
     } else {
-      var cellToFill = document.getElementById(placesRestantes +':' +y); /* insère une div en cercle dans la cellule ayant pour colonne y, mais ligne la valeur du nombre de place. Sachant
+      var cellToFill = document.getElementById(placesRestantes+':'+y); /* insère une div en cercle dans la cellule ayant pour colonne y, mais ligne la valeur du nombre de place. Sachant
       que la cellule la plus basse a pour valeur de x 6, les jetons se placeront du bas vers le haut */
       if (couleur === "yellow") {
         cellToFill.appendChild(circle);
-        couleur="red"
+        couleur="red";
       } else{
         cellToFill.appendChild(circle);
-        couleur="yellow"
+        couleur="yellow";
+      }
+    }
+    whoIsPlaying();
+    /* initialisation des compteurs pour l'alignement des pions */
+    var countRight=0;
+    var countLeft=0;
+    var sum = 0;
+    var sumBottom =0;
+    var currentId=cellToFill.id;
+    var z = parseInt(currentId.charAt(0),10); /* récupération des chiffres de l'id, et conversion de string à int */
+    var t = parseInt(currentId.charAt(2),10);
+
+    /* Ici, on aura la fonction qui calculera le nombre de voisins de la même couleur par la droite */
+    for (var i=t+1; i< 8; i++){
+      var contains = document.getElementById(z+':'+i);
+      var childRight = contains.children; /* récupération des éléments enfants */
+      if(childRight[0]!= undefined){ /* vérification que le premier enfant n'est pas inexistant */
+        // console.log(childRight[0].style.background);
+        if (couleur ==="red"){
+          if (childRight[0].style.background==="yellow"){ /* comparaison de la couleur des background des cercles pour permettre le calcul du nombre de pions alignés */
+            countRight++;
+          } else {
+            break;
+          }
+        } else {
+          if (childRight[0].style.background==="red"){
+            countRight++;
+          } else {
+            break;
+          }
+        }
+      }
+    }
+    /* Ici, on aura la fonction qui calculera le nombre de voisins de la même couleur par la gauche */
+    for (var i=t-1; i>0; i--){
+      var contains = document.getElementById(z+':'+i);
+      var childLeft = contains.children;
+      if(childLeft[0]!= undefined){
+        // console.log(childLeft[0].style.background);
+        if (couleur ==="red"){
+          if (childLeft[0].style.background==="yellow"){
+            countLeft++;
+          } else {
+            break;
+          }
+        } else {
+          if (childLeft[0].style.background==="red"){
+            countLeft++;
+          } else {
+            break;
+          }
+        }
+      }
+    }
+    /* Ici on aura la fonction qui calculera le nombre de voisins de la même couleur par le bas */
+    for (var i=z+1; i<7; i++){
+      var contains = document.getElementById(i+':'+t);
+      var childBottom = contains.children;
+      if(childBottom[0]!= undefined){
+        // console.log(childBottom[0].style.background);
+        if (couleur ==="red"){
+          if (childBottom[0].style.background==="yellow"){
+            sumBottom++;
+          } else {
+            break;
+          }
+        } else {
+          if (childBottom[0].style.background==="red"){
+            sumBottom++;
+          } else {
+            break;
+          }
+        }
+      }
+    }
+    sum = countLeft+countRight; /* ajout des 2 sommes des pions alignés sur la droite et la gauche */
+    if (sum === 3 || sumBottom ===3) { /* somme de 3 car le pion posé est compté */
+      if (couleur ==="red") {
+        alert("Le joueur 1 remporte la manche");
+        newGame();
+      } else {
+        alert("Le joueur 2 remporte la manche");
+        newGame();
       }
     }
   }
+
 }
 
+
+function newGame(){
+  if (confirm("Voulez vous relancer une partie?")){
+    document.location.reload(true);
+  }
+}
+
+// Cette fonction est à compléter pour que le numéro du joueur soit modifié après chaque coup
+var playing = document.createElement('div');
+document.getElementById('playerTurn').appendChild(playing);
+playing.innerHTML =" Joueur 1, commencez";
+playing.style.fontSize ="35px";
+playing.style.textAlign="center";
+var note = document.createElement('div');
+document.getElementById('playerTurn').appendChild(note);
+note.style.paddingTop="30px";
+note.style.fontSize="20px";
+note.innerHTML = "Attention. La vérification des éléments alignés en diagonale n'est pas fonctionnelle (pour le moment). Soyez donc prudents, et vérifiez par vous-même";
+function whoIsPlaying(){
+  if (couleur == "yellow"){
+    playing.innerHTML = "C'est au joueur 1 de jouer";
+    playing.style.fontSize="35px";
+  } else{
+    playing.innerHTML = "C'est au joueur 2 de jouer";
+    playing.style.fontSize="35px";
+  }
+}
 
 // Créer une fonction qui vérifie si le joueur a gagné ou pas
 
