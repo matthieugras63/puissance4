@@ -105,15 +105,11 @@ for (var i = 0; i < cells.length; i++) {
       if (couleur ==="red"){
         if (childRight[0].style.background==="yellow"){ /* comparaison de la couleur des background des cercles pour permettre le calcul du nombre de pions alignés */
           countRight++;
-        } else {
-          break;
-        }
+        } else {break;}
       } else {
         if (childRight[0].style.background==="red"){
           countRight++;
-        } else {
-          break;
-        }
+        } else {break;}
       }
     }
   }
@@ -260,20 +256,20 @@ for (var i=z+1, j= t+1; i<8, j < 8; i++, j++){
     }
   }
 }
-
-
-sum = countLeft+countRight; /* ajout des 2 sommes des pions alignés sur la droite et la gauche */
-sumDiagTopRight = countTopRight+countBotLeft;
-sumDiagTopLeft = countTopLeft + countBotRight;
-if (sum === 3 || sumBottom ===3 || sumDiagTopRight ===3 || sumDiagTopLeft ===3) { /* somme de 3 car le pion posé est compté */
-  if (couleur ==="red") {
-    alert("Le joueur 1 remporte la manche");
-    newGame();
-  } else {
-    alert("Le joueur 2 remporte la manche");
-    newGame();
+setTimeout(function(){
+  sum = countLeft+countRight; /* ajout des 2 sommes des pions alignés sur la droite et la gauche */
+  sumDiagTopRight = countTopRight+countBotLeft;
+  sumDiagTopLeft = countTopLeft + countBotRight;
+  if (sum === 3 || sumBottom ===3 || sumDiagTopRight ===3 || sumDiagTopLeft ===3) { /* somme de 3 car le pion posé est compté */
+    if (couleur ==="red") {
+      alert("Le joueur 1 remporte la manche");
+      newGame();
+    } else {
+      alert("Le joueur 2 remporte la manche");
+      newGame();
+    }
   }
-}
+},100);
 }
 }
 
