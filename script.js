@@ -15,6 +15,14 @@ function createTitle(){
   document.getElementById('title').appendChild(title);
 }
 
+var scoreJoueur1=0;
+var scoreJoueur2=0;
+var winner = 0;
+var stop =0;
+
+var score = document.getElementById('scoreJoueurs');
+score.innerHTML="Score du joueur 1: " +scoreJoueur1+ "<br><br>Score du joueur 2: " +scoreJoueur2;
+
 /* fonction de création du tableau */
 function createTable(){
   var plateau = document.createElement('table');
@@ -38,7 +46,7 @@ function createTable(){
 }
 }
 document.getElementById('plate').appendChild(plateau);
-plateau.id="table"
+plateau.id="table";
 }
 
 
@@ -48,15 +56,16 @@ cells = document.getElementsByTagName('td');
 var couleur = "yellow";
 for (var i = 0; i < cells.length; i++) {
   cells[i].onclick=function(){ /* évènement au click sur les cellules du tableau */
-    var circle = document.createElement('div'); /* création d'une div en forme de cercle */
-    circle.style.borderRadius="50%";
-    circle.style.width="90px";
-    circle.style.height="90px";
-    circle.style.padding="5px";
-    circle.style.background=couleur;
-    var whichId=this.id; /* récupération de l'id de la cellule sur laquelle on click */
-    var x = whichId.charAt(0); /* récupération de la première valeur. Format x:y, on récupèrera l'index 0, à savoir x ici */
-    var y = whichId.charAt(2); /* idem avec l'index 2 */
+    if (stop == 0) {
+      var circle = document.createElement('div'); /* création d'une div en forme de cercle */
+      circle.style.borderRadius="50%";
+      circle.style.width="90px";
+      circle.style.height="90px";
+      circle.style.padding="5px";
+      circle.style.background=couleur;
+      var whichId=this.id; /* récupération de l'id de la cellule sur laquelle on click */
+      var x = whichId.charAt(0); /* récupération de la première valeur. Format x:y, on récupèrera l'index 0, à savoir x ici */
+      var y = whichId.charAt(2); /* idem avec l'index 2 */
     // console.log("ligne: " +x);
     // console.log("colonne: " +y);
     var placesRestantes = 0 /* initialisation du nombre de places dispo restantes dans la colonne */
@@ -114,7 +123,6 @@ for (var i = 0; i < cells.length; i++) {
     } else {
       break
     }
-    console.log("nombre de pions à droite : " +countRight)
   }
   /* Ici, on aura la fonction qui calculera le nombre de voisins de la même couleur par la gauche */
   for (var i=t-1; i>0; i--){
@@ -136,7 +144,6 @@ for (var i = 0; i < cells.length; i++) {
           }
         }
       } else {break}
-      console.log("nombre de pions à gauche: "+countLeft);
     }
     /* Ici on aura la fonction qui calculera le nombre de voisins de la même couleur par le bas */
     for (var i=z+1; i<7; i++){
@@ -184,6 +191,7 @@ for (var i = 0; i < cells.length; i++) {
     }else{break}
   }
 }
+
 /* Calcule le nombre de voisins par la diagonale haute gauche */
 
 for (var i=z-1, j= t-1; i>0, j > 0; i--, j--){
@@ -268,22 +276,48 @@ setTimeout(function(){
   if (sum >= 3 || sumBottom >= 3 || sumDiagTopRight >= 3 || sumDiagTopLeft >=3) { /* somme de 3 car le pion posé est compté */
     if (couleur ==="red") {
       alert("Le joueur 1 remporte la manche");
+      winner =1;
       newGame();
     } else {
       alert("Le joueur 2 remporte la manche");
+      winner =2;
       newGame();
     }
   }
 },100);
 }
 }
-
+}
 
 function newGame(){
   if (confirm("Voulez vous relancer une partie?")){
-    document.location.reload(true);
+    for (i=1; i<=6; i++){
+     for (j=1; j<=7; j++){
+      var cell = document.getElementById(i+':'+j);
+      cell.innerHTML="";
+      couleur="yellow";
+      whoIsPlaying();
+    }
   }
+  if (winner === 1) {
+    scoreJoueur1++;
+  } else {
+    scoreJoueur2++;
+  }
+  score.innerHTML="Score du joueur 1: " +scoreJoueur1+ "<br><br>Score du joueur 2: " +scoreJoueur2;
+
+} else {
+  stop = 1;
+  if (winner === 1) {
+    scoreJoueur1++;
+  } else {
+    scoreJoueur2++;
+  }
+  score.innerHTML="Score du joueur 1: " +scoreJoueur1+ "<br><br>Score du joueur 2: " +scoreJoueur2;
+  stop = 1;
 }
+}
+
 
 // Cette fonction est à compléter pour que le numéro du joueur soit modifié après chaque coup
 var playing = document.createElement('div');
@@ -303,6 +337,13 @@ function whoIsPlaying(){
     playing.innerHTML = "C'est au joueur 2 de jouer";
     playing.style.fontSize="35px";
   }
+}
+
+var bouton = document.querySelector('button');
+bouton.addEventListener('click', reload);
+
+function reload(){
+  document.location.reload(true);
 }
 
 // Créer une fonction qui vérifie si le joueur a gagné ou pas
