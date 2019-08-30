@@ -17,16 +17,30 @@ body{
 #middle{
   width: 100%;
   display: flex;
+  align-items: center;
   justify-content: center;
 }
 
+#score{
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 15%;
+}
+
+#score p{
+  font-size: 30px;
+}
+
 #plate{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+  margin-right: auto;
+  width: 55%;
 }
 
 #playerTurn{
   padding-top: 50px;
+}
+
+button{
+  width: 100px;
+  height: 40px;
 }
